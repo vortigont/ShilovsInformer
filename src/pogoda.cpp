@@ -1,12 +1,17 @@
 //===============================================================================================================================//
 //                              ПОГОДА                                                //
 //===============================================================================================================================//
+#include "main.h"
+#include <UnixTime.h>
 #include <OpenWeather.h>
 #define TIME_OFFSET 1UL+10800
+
+String gorod ="Гомеле", latitude = "52.43", longitude = "30.97", api_key = "your_key";
+String units = "metric";  // or "imperial"
+String language = "ru";   // See notes tab
+
 OW_Weather ow;
-OW_current *current = new OW_current;
-OW_hourly *hourly = new OW_hourly;
-OW_daily  *daily = new OW_daily;
+
 int timezone = 3;
 int deg;
 float hum,windspeed,pres;
@@ -19,7 +24,27 @@ UnixTime stamp(3);
 int di = 0;
 int d, d1,d2,d3,d4,d5;
 String voshod,zakat,newvosh,Timeper,vosh,zakt,descript,degString;
+String pogodaS;
+String pogodaP; 
+String POGODA;
+
 int vos1,vos2,zak1,zak2;
+
+//погода
+bool flagPogoda = false;
+
+char Buf2[300];
+char Buf4[250];
+char Buf3[] = "     Нет погоды";
+char Buf5[] = "     Нет прогноза погоды";
+
+/***************************************************************************************
+**                          Convert unix time to a time string
+***************************************************************************************/
+String strTime(time_t unixTime){
+  unixTime += TIME_OFFSET;
+  return ctime(&unixTime);
+}
 
 void printCurrentWeather()
 {
@@ -205,10 +230,36 @@ void printCurrentWeather()
  
 }
 
-/***************************************************************************************
-**                          Convert unix time to a time string
-***************************************************************************************/
-String strTime(time_t unixTime){
-  unixTime += TIME_OFFSET;
-  return ctime(&unixTime);
+void displayPogoda1()
+{
+  if(flagPogoda == true){
+     if(location_code != 0){
+         parola.displayText(Buf2, just, sk, 1,PA_SCROLL_LEFT ,PA_SCROLL_LEFT );
+         }else{
+         parola.displayText(Buf3, just, sk, 1,PA_SCROLL_LEFT ,PA_SCROLL_LEFT );
+         }
+      unknown_q++;
+      modDate=0;
+   }else{
+      unknown_q++;
+      modDate=0;
+   }
+  
+}
+
+void displayPogoda2()
+{
+    if(flagPogoda == true){
+     if(location_code != 0){
+         parola.displayText(Buf4, just, sk, 1,PA_SCROLL_LEFT ,PA_SCROLL_LEFT );
+         }else{
+         parola.displayText(Buf5, just, sk, 1,PA_SCROLL_LEFT ,PA_SCROLL_LEFT );
+         }
+      unknown_q++;
+      modDate=0;
+     }else{
+      unknown_q++;
+      modDate=0;
+   }   
+  
 }
